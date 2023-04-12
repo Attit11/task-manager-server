@@ -80,13 +80,16 @@ router.delete("/user", auth, async (req, res) => {
 
 //update user
 router.patch("/user/me",auth, async (req, res) => {
+//generating user input update field
   const updates = Object.keys(req.body);
   const allowedUpdated = ["name", "age", "email", "password"];
+  //checking whether the update field is valid or not
   const isValid = updates.every((update) => allowedUpdated.includes(update));
   if (!isValid) {
     res.status(401).send({ error: "Invalid Updates!" });
   }
   try {
+    //updating with the replaced user input
     updates.forEach((update) => (req.user[update] = req.body[update]));
     await req.user.save();
     res.send(req.user)
