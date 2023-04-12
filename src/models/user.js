@@ -93,5 +93,29 @@ userSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
+//user task relationship
+userSchema.virtual("tasks", {
+  ref: "Task",
+  localField: "_id",
+  foreignField: "owner",
+});
+
+//delete user tasks when user is removed
+userSchema.pre("remove", async function () {
+  const user = this;
+  await Task.deleteMany({
+    owner: user._id,
+  });
+});
+
+//hiding private data
+userSchema.methods.toJSON = function () {
+  const user = this;
+  const userObject = user.toObject();
+  delete userObject.password;
+  delete userObject.tokens;
+  return userObject;
+};
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;
