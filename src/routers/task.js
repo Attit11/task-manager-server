@@ -6,7 +6,6 @@ const router = new express.Router();
 //create task
 router.post("/task", auth, async (req, res) => {
   try {
-    console.log(req)
     const task = new Task({ ...req.body, owner: req.user._id });
     await task.save();
     res.status(201).send(task);

@@ -7,7 +7,6 @@ const router = new express.Router();
 //create user
 router.post("/user", async (req, res) => {
   try {
-    console.log(req)
     //creating an instance of the user
     const user = new User(req.body);
     //generating token for the user instance and saving it in the database
