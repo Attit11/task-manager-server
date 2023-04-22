@@ -6,7 +6,8 @@ const router = new express.Router();
 //create task
 router.post("/task", auth, async (req, res) => {
   try {
-    const task = new Task({ ...req.body.data, owner: req.user._id });
+    console.log(req)
+    const task = new Task({ ...req.body, owner: req.user._id });
     await task.save();
     res.status(201).send(task);
   } catch (error) {
@@ -49,7 +50,7 @@ router.get("/task/:id", auth, async (req, res) => {
 });
 
 //delete task
-router.delete("/task/:id", async (req, res) => {
+router.delete("/task/:id", auth, async (req, res) => {
   try {
     const task = await Task.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
     if(!task){
@@ -57,6 +58,7 @@ router.delete("/task/:id", async (req, res) => {
     }
     res.send({ message: "User Deleted!" });
   } catch (error) {
+    console.log({error})
     res.status(500).send({ error });
   }
 });
