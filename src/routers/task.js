@@ -6,10 +6,12 @@ const router = new express.Router();
 //create task
 router.post("/task", auth, async (req, res) => {
   try {
-    const task = new Task({ ...req.body, owner: req.user._id });
+    const task = new Task({ ...req.body.data, owner: req.user._id });
     await task.save();
     res.status(201).send(task);
   } catch (error) {
+    console.log(`❌ Error Encountered ${error}`);
+    
     res.status(500).send({ error });
   }
 });
